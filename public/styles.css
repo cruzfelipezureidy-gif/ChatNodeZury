@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+
+:root{
+  /* Tonos rosados monocromáticos */
+  --bg-start: #fff3f8; /* fondo superior muy claro */
+  --bg-end: #fff0f6;   /* fondo inferior sutil */
+  --card-bg: #ffffff;
+  --muted: #b38aa0;
+  --primary: #d63384; /* rosa principal */
+  --accent: #ff7ab6;
+  --glass: rgba(255,255,255,0.6);
+  /* Paleta monocromática rosa (de claro a oscuro) */
+  --p-1: #fff0f6; /* extra claro */
+  --p-2: #ffd6eb;
+  --p-3: #ffadd6;
+  --p-4: #ff84bf;
+  --p-5: #ff4da6;
+  --p-6: #d63384; /* oscuro */
+  --grad-speed: 12s;
+
+}
+
+  *{box-sizing: border-box}
+
+body {
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  color: #2b3a4a;
+  -webkit-font-smoothing:antialiased;
+}
+
+  /* Animación de gradiente cromático global (muy sutil) */
+  @keyframes chromaShift {
+    0% { filter: hue-rotate(0deg) }
+    50% { filter: hue-rotate(18deg) }
+    100% { filter: hue-rotate(0deg) }
+  }
+
+  /* Aplicar una animación ligera al contenedor principal para sensación cromática */
+  #app-chat{ /*display: none;*/
+    animation: chromaShift var(--grad-speed) ease-in-out infinite;
+  }
+
+h2{
+  font-size: 18px;
+  padding: 14px 20px;
+  color: var(--primary);
+  text-align: center;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+/* Contenedores */
+#panel-bienvenida{
+  max-width: 540px;
+  margin: 8vh auto 18px;
+  padding: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.7));
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(214,51,132,0.08);
+  text-align: center;
+}
+
+#app-chat{ /*display: none;*/
+  max-width: 760px;
+  margin: 28px auto;
+  background: var(--card-bg);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(214,51,132,0.06);
+  overflow: hidden;
+  border: 1px solid rgba(30,60,90,0.04);
+  padding: 22px;
+}
+
+/* Ventana de mensajes */
+#ventana-mensajes{
+  height: 420px;
+  overflow-y: auto;
+  background: linear-gradient(180deg,#fbfdff,#f6f9ff);
+  border-radius: 10px;
+  border: 1px solid rgba(30,60,90,0.03);
+  padding: 18px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Mensajes: contenedor y estilo tipo burbuja */
+#output{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Mensajes entrantes (izquierda) */
+#output p{
+  padding: 12px 16px;
+  margin: 0;
+  color: #0f2133;
+  line-height: 1.35;
+  max-width: 76%;
+  align-self: flex-start;
+  display: block;
+  border-radius: 14px 14px 14px 6px; /* punta hacia la izquierda */
+  background: linear-gradient(135deg, var(--p-5), var(--p-6));
+  color: white;
+  box-shadow: 0 8px 26px rgba(214,51,132,0.12);
+  word-wrap: break-word;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Soporte cuando el mensaje es un <p class="box"> (JS antiguo) -> tratar como mensaje saliente */
+#output p.box{
+  align-self: flex-end;
+  background: linear-gradient(90deg,var(--p-3),var(--p-2));
+  color: #3a0f2a;
+  border-radius: 14px 14px 6px 14px;
+  padding: 12px 16px;
+}
+
+/* Estado escribiendo */
+#escribiendo-mensaje p{
+  color: var(--muted);
+  padding: 10px 14px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Nombre de usuario dentro del mensaje */
+#output strong{
+  /* Suavizar contraste para que el nombre se lea sobre el fondo rosa */
+  color: rgba(255,255,255,0.92); /* blanco suave sobre gradiente */
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+  opacity: 0.95;
+}
+
+/* Asegurar que el encabezado también se suavice en burbujas salientes */
+#output p strong,
+#output > .box p strong,
+#output > .box > .nube strong{
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+  font-size: 13px;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+  opacity: 0.95;
+}
+
+/* Si el <p> tiene la clase .box (mensaje saliente creado como <p class="box">) - ajustar el strong para mayor contraste */
+#output p.box strong{
+  color: rgba(58,15,42,0.92);
+  text-shadow: none;
+}
+
+label{display:block}
+
+/* Inputs */
+input{
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid rgba(30,60,90,0.06);
+  border-radius: 10px;
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  color: #2b3a4a;
+  margin-bottom: 10px;
+  transition: box-shadow .18s ease, transform .12s ease;
+}
+
+input:focus{outline: none; box-shadow: 0 6px 20px rgba(47,111,180,0.08); transform: translateY(-1px)}
+
+/* Botón primario */
+button{
+  background: linear-gradient(180deg,var(--primary), #b22f73);
+  color: #ffffff;
+  font-size: 16px;
+  border: 0;
+  padding: 12px 16px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  box-shadow: 0 8px 24px rgba(214,51,132,0.12);
+}
+
+button:hover{ transform: translateY(-2px); opacity: .98 }
+
+/* Burbuja preexistente: nube */
+.nube{
+  background: linear-gradient(90deg,var(--p-5),var(--p-6));
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(214,51,132,0.12);
+  display: inline-block;
+  padding: 10px 18px;
+  position: relative;
+  vertical-align: top;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: .2px;
+  transform: translateZ(0);
+  background-size: 200% 200%;
+  animation: bgShift var(--grad-speed) ease-in-out infinite;
+}
+
+.nube::before{
+  background: linear-gradient(90deg,var(--p-5),var(--p-6));
+  content: "\00a0";
+  display: block;
+  height: 12px;
+  position: absolute;
+  top: 12px;
+  left: -8px;
+  transform: rotate(29deg) skew(-35deg);
+  width: 18px;
+}
+
+@keyframes bgShift{
+  0%{ background-position: 0% 50% }
+  50%{ background-position: 100% 50% }
+  100%{ background-position: 0% 50% }
+}
+
+/* Caja para mensajes del usuario: alineación derecha */
+.box{
+  /* usar flex alignment en vez de float */
+  align-self: flex-end;
+  margin: 0 6px 0 0;
+}
+
+.box::before{ box-shadow: 2px 2px 6px rgba(0,0,0,0.06); }
+
+/* Si un <p> está dentro de .box lo mostramos como burbuja de usuario (derecha) */
+#output > .box p, #output > .box > .nube{
+  background: linear-gradient(90deg,var(--p-3),var(--p-2));
+  color: #3a0f2a;
+  border-radius: 14px 14px 6px 14px; /* punta hacia la derecha */
+  padding: 12px 16px;
+  max-width: 76%;
+  display: block;
+}
+
+/* Anillo cromático alrededor del contenedor de chat */
+#app-chat{
+  position: relative;
+}
+#app-chat::before{
+  content: '';
+  position: absolute;
+  inset: -3px;
+  z-index: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: conic-gradient(from 120deg, var(--p-2), var(--p-3), var(--p-4), var(--p-5), var(--p-6), var(--p-4), var(--p-2));
+  /* máscara removida por compatibilidad; el pseudo-elemento queda con baja opacidad como anillo cromático */
+  pointer-events: none;
+  opacity: .14;
+}
+
+/* Asegurar que contenido esté encima del anillo */
+#app-chat > *{ position: relative; z-index: 1 }
+
+/* Scrollbar estético para la ventana de mensajes */
+#ventana-mensajes::-webkit-scrollbar{ width: 10px }
+#ventana-mensajes::-webkit-scrollbar-track{ background: transparent }
+#ventana-mensajes::-webkit-scrollbar-thumb{ background: linear-gradient(180deg,var(--p-3),var(--p-5)); border-radius: 10px }
+
+/* Responsivo */
+@media (max-width: 640px){
+  #panel-bienvenida{ margin: 6vh 14px }
+  #app-chat{ margin: 18px 12px; padding: 16px }
+  #ventana-mensajes{ height: 360px }
+}
